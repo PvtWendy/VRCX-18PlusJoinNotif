@@ -1236,6 +1236,31 @@ export const useUserStore = defineStore('User', () => {
         D.treeData = formatJsonVars(D.ref);
     }
 
+    /**
+     * Get age verification status for a user from cache
+     * @param {string} userId
+     * @returns {string} ageVerificationStatus or empty string if not found
+     */
+    function getUserAgeVerificationStatus(userId) {
+        if (!userId) {
+            console.log(
+                'getUserAgeVerificationStatus called with invalid userId'
+            );
+            return '';
+        }
+        const user = cachedUsers.get(userId);
+        if (user && user.ageVerificationStatus) {
+            console.log(
+                `Age verification status for userId: ${userId} is ${user.ageVerificationStatus}`
+            );
+            return user.ageVerificationStatus;
+        }
+        console.log(
+            `Age verification status not found for userId: ${userId}`
+        );
+        return '';
+    }
+
     async function lookupUser(ref) {
         let ctx;
         if (ref.userId) {
@@ -2045,6 +2070,7 @@ export const useUserStore = defineStore('User', () => {
         isLocalUserVrcPlusSupporter,
         applyCurrentUser,
         applyUser,
+        getUserAgeVerificationStatus,
         showUserDialog,
         applyUserDialogLocation,
         sortUserDialogAvatars,

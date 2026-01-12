@@ -1225,6 +1225,10 @@ export const useNotificationStore = defineStore('Notification', () => {
         if (imageFile) {
             image = `file:///${imageFile}`;
         }
+        noty.ageVerified = userStore.getUserAgeVerificationStatus(noty.userId);
+
+        console.log('displayOverlayNotification', noty, message, image);
+
         AppApi.ExecuteVrOverlayFunction(
             'playNoty',
             JSON.stringify({ noty, message, image })
