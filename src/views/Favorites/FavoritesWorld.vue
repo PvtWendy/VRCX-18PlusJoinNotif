@@ -27,15 +27,14 @@
                 </Select>
             </div>
             <div class="favorites-toolbar__right">
-                <el-input
+                <InputGroupSearch
                     v-model="worldFavoriteSearch"
-                    clearable
                     class="favorites-toolbar__search"
                     :placeholder="t('view.favorite.worlds.search')"
                     @input="searchWorldFavorites" />
                 <DropdownMenu v-model:open="worldToolbarMenuOpen">
                     <DropdownMenuTrigger as-child>
-                        <el-button :icon="MoreFilled" size="small" circle />
+                        <Button class="rounded-full" size="icon" variant="outline"><Ellipsis /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent class="favorites-dropdown">
                         <li class="favorites-dropdown__control" @click.stop>
@@ -80,12 +79,15 @@
                         <div class="group-section__header">
                             <span>{{ t('view.favorite.worlds.vrchat_favorites') }}</span>
                             <TooltipWrapper side="bottom" :content="t('view.favorite.refresh_favorites_tooltip')">
-                                <el-button
-                                    :loading="isFavoriteLoading"
-                                    size="small"
-                                    :icon="Refresh"
-                                    circle
-                                    @click.stop="handleRefreshFavorites" />
+                                <Button
+                                    class="rounded-full"
+                                    variant="outline"
+                                    size="icon-sm"
+                                    :disabled="isFavoriteLoading"
+                                    @click.stop="handleRefreshFavorites">
+                                    <Spinner v-if="isFavoriteLoading" />
+                                    <Refresh v-else />
+                                </Button>
                             </TooltipWrapper>
                         </div>
                         <div class="group-section__list">
@@ -112,12 +114,9 @@
                                                 handleGroupMenuVisible(remoteGroupMenuKey(group.key), $event)
                                             ">
                                             <PopoverTrigger asChild>
-                                                <el-button
-                                                    text
-                                                    size="small"
-                                                    :icon="MoreFilled"
-                                                    circle
-                                                    @click.stop></el-button>
+                                                <Button class="rounded-full" variant="ghost" size="icon-sm" @click.stop>
+                                                    <MoreFilled />
+                                                </Button>
                                             </PopoverTrigger>
                                             <PopoverContent side="right" class="w-50 p-1 rounded-lg">
                                                 <div class="favorites-group-menu">
@@ -194,16 +193,18 @@
                     <div class="group-section">
                         <div class="group-section__header">
                             <span>{{ t('view.favorite.worlds.local_favorites') }}</span>
-                            <el-button
+                            <Button
+                                class="rounded-full"
+                                size="icon-sm"
+                                variant="outline"
                                 v-if="!refreshingLocalFavorites"
-                                size="small"
                                 @click.stop="refreshLocalWorldFavorites"
-                                :icon="Refresh"
-                                circle />
-                            <el-button v-else size="small" text @click.stop="cancelLocalWorldRefresh">
-                                <el-icon class="is-loading"><Loading /></el-icon>
+                                ><RefreshCcw
+                            /></Button>
+                            <Button size="icon-sm" variant="ghost" v-else @click.stop="cancelLocalWorldRefresh">
+                                <RefreshCcw />
                                 {{ t('view.favorite.worlds.cancel_refresh') }}
-                            </el-button>
+                            </Button>
                         </div>
                         <div class="group-section__list">
                             <template v-if="localWorldFavoriteGroups.length">
@@ -226,12 +227,13 @@
                                                         handleGroupMenuVisible(localGroupMenuKey(group), $event)
                                                     ">
                                                     <PopoverTrigger asChild>
-                                                        <el-button
-                                                            text
-                                                            size="small"
-                                                            :icon="MoreFilled"
-                                                            circle
-                                                            @click.stop></el-button>
+                                                        <Button
+                                                            class="rounded-full"
+                                                            size="icon-sm"
+                                                            variant="ghost"
+                                                            @click.stop
+                                                            ><Ellipsis
+                                                        /></Button>
                                                     </PopoverTrigger>
                                                     <PopoverContent side="right" class="w-50 p-1 rounded-lg">
                                                         <div class="favorites-group-menu">
@@ -263,11 +265,11 @@
                                 <el-icon><Plus /></el-icon>
                                 <span>{{ t('view.favorite.worlds.new_group') }}</span>
                             </div>
-                            <el-input
+                            <InputGroupField
                                 v-else
                                 ref="newLocalGroupInput"
                                 v-model="newLocalGroupName"
-                                size="small"
+                                size="sm"
                                 class="group-item__input"
                                 :placeholder="t('view.favorite.worlds.new_group')"
                                 @keyup.enter="handleLocalGroupCreationConfirm"
@@ -302,25 +304,34 @@
                     </div>
                     <div class="favorites-content__edit-actions">
                         <div v-if="worldEditMode && !isSearchActive" class="favorites-content__actions">
-                            <el-button size="small" @click="toggleSelectAllWorlds">
+                            <Button size="sm" variant="outline" @click="toggleSelectAllWorlds">
                                 {{
                                     isAllWorldsSelected
                                         ? t('view.favorite.deselect_all')
                                         : t('view.favorite.select_all')
                                 }}
-                            </el-button>
-                            <el-button size="small" :disabled="!hasWorldSelection" @click="clearSelectedWorlds">
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="secondary"
+                                :disabled="!hasWorldSelection"
+                                @click="clearSelectedWorlds">
                                 {{ t('view.favorite.clear') }}
-                            </el-button>
-                            <el-button size="small" :disabled="!hasWorldSelection" @click="copySelectedWorlds">
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                :disabled="!hasWorldSelection"
+                                @click="copySelectedWorlds">
                                 {{ t('view.favorite.copy') }}
-                            </el-button>
-                            <el-button
-                                size="small"
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="outline"
                                 :disabled="!hasWorldSelection"
                                 @click="showWorldBulkUnfavoriteSelectionConfirm">
                                 {{ t('view.favorite.bulk_unfavorite') }}
-                            </el-button>
+                            </Button>
                         </div>
                     </div>
                     <div ref="worldFavoritesContainerRef" class="favorites-content__list">
@@ -413,8 +424,12 @@
 
 <script setup>
     import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-    import { Loading, MoreFilled, Plus, Refresh } from '@element-plus/icons-vue';
+    import { MoreFilled, Plus, Refresh } from '@element-plus/icons-vue';
+    import { Ellipsis, RefreshCcw } from 'lucide-vue-next';
+    import { InputGroupField, InputGroupSearch } from '@/components/ui/input-group';
+    import { Button } from '@/components/ui/button';
     import { ElMessageBox } from 'element-plus';
+    import { Spinner } from '@/components/ui/spinner';
     import { storeToRefs } from 'pinia';
     import { toast } from 'vue-sonner';
     import { useI18n } from 'vue-i18n';
@@ -1008,10 +1023,10 @@
         getLocalWorldFavorites();
     }
 
-    function changeWorldGroupVisibility(name, visibility, menuKey = null) {
+    function changeWorldGroupVisibility(group, visibility, menuKey = null) {
         const params = {
-            type: 'world',
-            group: name,
+            type: group.type,
+            group: group.name,
             visibility
         };
         favoriteRequest.saveFavoriteGroup(params).then((args) => {
@@ -1105,7 +1120,7 @@
 
     function handleVisibilitySelection(group, visibility) {
         const menuKey = remoteGroupMenuKey(group.key);
-        changeWorldGroupVisibility(group.name, visibility, menuKey);
+        changeWorldGroupVisibility(group, visibility, menuKey);
     }
 
     function handleRemoteRename(group) {
@@ -1149,7 +1164,7 @@
                 }
                 favoriteRequest
                     .saveFavoriteGroup({
-                        type: 'world',
+                        type: group.type,
                         group: group.name,
                         displayName: newName
                     })

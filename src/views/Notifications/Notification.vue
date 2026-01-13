@@ -42,20 +42,23 @@
                             :label="t('view.notification.filters.' + type)"
                             :value="type" />
                     </el-select>
-                    <el-input
+                    <InputGroupField
                         v-model="notificationTable.filters[1].value"
                         :placeholder="t('view.notification.search_placeholder')"
                         clearable
                         class="flex-[0.4]"
                         style="margin: 0 10px" />
                     <TooltipWrapper side="bottom" :content="t('view.notification.refresh_tooltip')">
-                        <el-button
-                            type="default"
-                            :loading="isNotificationsLoading"
-                            :icon="Refresh"
-                            circle
+                        <Button
+                            class="rounded-full"
+                            variant="outline"
+                            size="icon-sm"
+                            :disabled="isNotificationsLoading"
                             style="flex: none"
-                            @click="refreshNotifications()" />
+                            @click="refreshNotifications()">
+                            <Spinner v-if="isNotificationsLoading" />
+                            <Refresh v-else />
+                        </Button>
                     </TooltipWrapper>
                 </div>
             </template>
@@ -71,8 +74,11 @@
 
 <script setup>
     import { computed, ref, watch } from 'vue';
+    import { Button } from '@/components/ui/button';
+    import { InputGroupField } from '@/components/ui/input-group';
     import { ElMessageBox } from 'element-plus';
     import { Refresh } from '@element-plus/icons-vue';
+    import { Spinner } from '@/components/ui/spinner';
     import { storeToRefs } from 'pinia';
     import { toast } from 'vue-sonner';
     import { useI18n } from 'vue-i18n';

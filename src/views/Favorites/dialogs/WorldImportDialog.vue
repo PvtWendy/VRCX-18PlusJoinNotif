@@ -13,21 +13,19 @@
                     {{ worldImportDialog.progress }} / {{ worldImportDialog.progressTotal }}
                     <el-icon style="margin: 0 5px"><Loading /></el-icon>
                 </div>
-                <el-button v-if="worldImportDialog.loading" size="small" @click="cancelWorldImport">
+                <Button v-if="worldImportDialog.loading" size="sm" variant="outline" @click="cancelWorldImport">
                     {{ t('dialog.world_import.cancel') }}
-                </el-button>
-                <el-button v-else size="small" :disabled="!worldImportDialog.input" @click="processWorldImportList">
+                </Button>
+                <Button size="sm" v-else :disabled="!worldImportDialog.input" @click="processWorldImportList">
                     {{ t('dialog.world_import.process_list') }}
-                </el-button>
+                </Button>
             </div>
         </div>
-        <el-input
+        <InputGroupTextareaField
             v-model="worldImportDialog.input"
-            type="textarea"
-            size="small"
             :rows="10"
-            resize="none"
-            style="margin-top: 10px"></el-input>
+            style="margin-top: 10px"
+            input-class="resize-none" />
         <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px">
             <div>
                 <div class="flex items-center gap-2">
@@ -75,13 +73,16 @@
                 </span>
             </div>
             <div>
-                <el-button size="small" :disabled="worldImportTable.data.length === 0" @click="clearWorldImportTable">
+                <Button
+                    size="sm"
+                    variant="secondary"
+                    class="mr-2"
+                    :disabled="worldImportTable.data.length === 0"
+                    @click="clearWorldImportTable">
                     {{ t('dialog.world_import.clear_table') }}
-                </el-button>
-                <el-button
-                    size="small"
-                    type="primary"
-                    style="margin: 5px"
+                </Button>
+                <Button
+                    size="sm"
                     :disabled="
                         worldImportTable.data.length === 0 ||
                         (!worldImportDialog.worldImportFavoriteGroup &&
@@ -89,7 +90,7 @@
                     "
                     @click="importWorldImportTable">
                     {{ t('dialog.world_import.import') }}
-                </el-button>
+                </Button>
             </div>
         </div>
         <span v-if="worldImportDialog.importProgress" style="margin: 10px">
@@ -99,9 +100,9 @@
         </span>
         <br />
         <template v-if="worldImportDialog.errors">
-            <el-button size="small" @click="worldImportDialog.errors = ''">
+            <Button size="sm" variant="secondary" @click="worldImportDialog.errors = ''">
                 {{ t('dialog.world_import.clear_errors') }}
-            </el-button>
+            </Button>
             <h2 style="font-weight: bold; margin: 5px 0">
                 {{ t('dialog.world_import.errors') }}
             </h2>
@@ -149,7 +150,9 @@
             </el-table-column>
             <el-table-column :label="t('table.import.action')" width="90" align="right">
                 <template #default="{ row }">
-                    <el-button text :icon="Close" size="small" @click="deleteItemWorldImport(row)"></el-button>
+                    <Button size="icon-sm" class="w-6 h-6" variant="ghost" @click="deleteItemWorldImport(row)"
+                        ><Trash2
+                    /></Button>
                 </template>
             </el-table-column>
         </DataTable>
@@ -159,7 +162,10 @@
 <script setup>
     import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
     import { computed, ref, watch } from 'vue';
-    import { Close, Loading } from '@element-plus/icons-vue';
+    import { Button } from '@/components/ui/button';
+    import { InputGroupTextareaField } from '@/components/ui/input-group';
+    import { Loading } from '@element-plus/icons-vue';
+    import { Trash2 } from 'lucide-vue-next';
     import { storeToRefs } from 'pinia';
     import { toast } from 'vue-sonner';
     import { useI18n } from 'vue-i18n';
@@ -353,7 +359,7 @@
     function addFavoriteWorld(ref, group, message) {
         return favoriteRequest
             .addFavorite({
-                type: 'world',
+                type: group.type,
                 favoriteId: ref.id,
                 tags: group.name
             })

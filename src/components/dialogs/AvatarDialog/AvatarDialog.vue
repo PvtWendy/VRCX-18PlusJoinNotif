@@ -338,16 +338,17 @@
                                 accept="image/*"
                                 style="display: none"
                                 @change="onFileChangeAvatarGallery" />
-                            <el-button
+                            <Button
                                 v-if="avatarDialog.ref.authorId === currentUser.id"
+                                variant="outline"
+                                size="sm"
                                 :disabled="avatarDialog.galleryLoading"
-                                size="small"
-                                :icon="Upload"
-                                :loading="avatarDialog.galleryLoading"
-                                style="margin-left: 5px"
-                                @click="displayAvatarGalleryUpload"
-                                >{{ t('dialog.screenshot_metadata.upload') }}</el-button
-                            >
+                                class="ml-1"
+                                @click="displayAvatarGalleryUpload">
+                                <Spinner v-if="avatarDialog.galleryLoading" />
+                                <Upload v-else />
+                                {{ t('dialog.screenshot_metadata.upload') }}
+                            </Button>
                             <el-progress
                                 v-if="avatarDialog.galleryLoading"
                                 :show-text="false"
@@ -401,16 +402,13 @@
                         <div class="x-friend-item" style="width: 100%; cursor: default">
                             <div class="detail">
                                 <span class="name" style="margin-bottom: 5px">{{ t('dialog.avatar.info.memo') }}</span>
-                                <el-input
+                                <InputGroupTextareaField
                                     v-model="memo"
                                     class="extra"
-                                    size="small"
-                                    type="textarea"
                                     :rows="2"
-                                    :autosize="{ minRows: 1, maxRows: 20 }"
                                     :placeholder="t('dialog.avatar.info.memo_placeholder')"
-                                    resize="none"
-                                    @change="onAvatarMemoChange"></el-input>
+                                    input-class="resize-none min-h-0"
+                                    @change="onAvatarMemoChange" />
                             </div>
                         </div>
                         <div class="x-friend-item" style="width: 100%; cursor: default">
@@ -544,6 +542,8 @@
     import { computed, defineAsyncComponent, nextTick, ref, watch } from 'vue';
     import { Button } from '@/components/ui/button';
     import { ElMessageBox } from 'element-plus';
+    import { InputGroupTextareaField } from '@/components/ui/input-group';
+    import { Spinner } from '@/components/ui/spinner';
     import { storeToRefs } from 'pinia';
     import { toast } from 'vue-sonner';
     import { useI18n } from 'vue-i18n';

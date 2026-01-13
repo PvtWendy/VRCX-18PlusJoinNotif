@@ -1,15 +1,15 @@
 <template>
     <div class="x-container">
         <div style="margin: 0 0 10px; display: flex; align-items: center">
-            <el-input
+            <InputGroupField
                 :model-value="searchText"
                 :placeholder="t('view.search.search_placeholder')"
                 style="flex: 1"
                 clearable
                 @input="updateSearchText"
-                @keyup.enter="search"></el-input>
+                @keyup.enter="search" />
             <TooltipWrapper side="bottom" :content="t('view.search.clear_results_tooltip')">
-                <Button class="rounded-full mr-2" size="icon-sm" variant="ghost" @click="handleClearSearch"
+                <Button class="rounded-full ml-2" size="icon" variant="ghost" @click="handleClearSearch"
                     ><Trash2
                 /></Button>
             </TooltipWrapper>
@@ -158,14 +158,15 @@
                             </SelectContent>
                         </Select>
                         <TooltipWrapper side="bottom" :content="t('view.search.avatar.refresh_tooltip')">
-                            <el-button
-                                type="default"
-                                :loading="userDialog.isAvatarsLoading"
-                                size="small"
-                                :icon="Refresh"
-                                class="ml-1"
-                                circle
-                                @click="refreshUserDialogAvatars"></el-button>
+                            <Button
+                                class="rounded-full ml-1"
+                                variant="outline"
+                                size="icon-sm"
+                                :disabled="userDialog.isAvatarsLoading"
+                                @click="refreshUserDialogAvatars">
+                                <Spinner v-if="userDialog.isAvatarsLoading" />
+                                <Refresh v-else />
+                            </Button>
                         </TooltipWrapper>
                         <span style="font-size: 14px; margin-left: 5px; margin-right: 5px">{{
                             t('view.search.avatar.result_count', {
@@ -346,6 +347,8 @@
     import { Button } from '@/components/ui/button';
     import { ButtonGroup } from '@/components/ui/button-group';
     import { Checkbox } from '@/components/ui/checkbox';
+    import { InputGroupField } from '@/components/ui/input-group';
+    import { Spinner } from '@/components/ui/spinner';
     import { Trash2 } from 'lucide-vue-next';
     import { ref } from 'vue';
     import { storeToRefs } from 'pinia';

@@ -16,15 +16,20 @@
             {{ t('dialog.note_export.description8') }} <br />
         </div>
 
-        <el-button size="small" :disabled="loading" style="margin-top: 10px" @click="updateNoteExportDialog">
+        <Button
+            size="sm"
+            variant="outline"
+            :disabled="loading"
+            style="margin-top: 10px"
+            @click="updateNoteExportDialog">
             {{ t('dialog.note_export.refresh') }}
-        </el-button>
-        <el-button size="small" :disabled="loading" style="margin-top: 10px" @click="exportNoteExport">
+        </Button>
+        <Button size="sm" variant="outline" :disabled="loading" style="margin-top: 10px" @click="exportNoteExport">
             {{ t('dialog.note_export.export') }}
-        </el-button>
-        <el-button v-if="loading" size="small" style="margin-top: 10px" @click="cancelNoteExport">
+        </Button>
+        <Button v-if="loading" size="sm" variant="outline" style="margin-top: 10px" @click="cancelNoteExport">
             {{ t('dialog.note_export.cancel') }}
-        </el-button>
+        </Button>
         <span v-if="loading" style="margin: 10px">
             <el-icon style="margin-right: 5px"><Loading /></el-icon>
             {{ t('dialog.note_export.progress') }} {{ progress }}/{{ progressTotal }}
@@ -65,12 +70,12 @@
 
             <el-table-column :label="t('table.import.note')" prop="memo">
                 <template #default="{ row }">
-                    <InputGroupCharCount
+                    <InputGroupTextareaField
                         v-model="row.memo"
                         :maxlength="256"
-                        multiline
-                        rows="2"
-                        input-class="min-h-0 py-1 resize-none" />
+                        :rows="2"
+                        input-class="min-h-0 py-1 resize-none"
+                        show-count />
                 </template>
             </el-table-column>
 
@@ -86,7 +91,7 @@
 <script setup>
     import { ref, watch } from 'vue';
     import { Button } from '@/components/ui/button';
-    import { InputGroupCharCount } from '@/components/ui/input-group';
+    import { InputGroupTextareaField } from '@/components/ui/input-group';
     import { Loading } from '@element-plus/icons-vue';
     import { storeToRefs } from 'pinia';
     import { useI18n } from 'vue-i18n';

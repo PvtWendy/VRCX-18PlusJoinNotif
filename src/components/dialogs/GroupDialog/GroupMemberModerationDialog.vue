@@ -10,13 +10,15 @@
             <el-tabs style="height: 100%">
                 <el-tab-pane :label="t('dialog.group_member_moderation.members')">
                     <div style="margin-top: 10px">
-                        <el-button
-                            type="default"
-                            size="small"
-                            :icon="Refresh"
-                            :loading="isGroupMembersLoading"
-                            circle
-                            @click="loadAllGroupMembers" />
+                        <Button
+                            class="rounded-full"
+                            variant="outline"
+                            size="icon-sm"
+                            :disabled="isGroupMembersLoading"
+                            @click="loadAllGroupMembers">
+                            <Spinner v-if="isGroupMembersLoading" />
+                            <Refresh v-else />
+                        </Button>
                         <span style="font-size: 14px; margin-left: 5px; margin-right: 5px">
                             {{ groupMemberModerationTable.data.length }}/{{
                                 groupMemberModeration.groupRef.memberCount
@@ -34,8 +36,9 @@
                                             !hasGroupPermission(groupMemberModeration.groupRef, 'group-bans-manage')
                                         )
                                     ">
-                                    <el-button
-                                        size="small"
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
                                         :disabled="
                                             Boolean(
                                                 isGroupMembersLoading ||
@@ -48,7 +51,7 @@
                                             {{ t(memberSortOrder.name) }}
                                             <el-icon style="margin-left: 5px"><ArrowDown /></el-icon>
                                         </span>
-                                    </el-button>
+                                    </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuItem
@@ -70,8 +73,9 @@
                                             !hasGroupPermission(groupMemberModeration.groupRef, 'group-bans-manage')
                                         )
                                     ">
-                                    <el-button
-                                        size="small"
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
                                         :disabled="
                                             Boolean(
                                                 isGroupMembersLoading ||
@@ -84,7 +88,7 @@
                                             {{ t(memberFilter.name) }}
                                             <el-icon style="margin-left: 5px"><ArrowDown /></el-icon>
                                         </span>
-                                    </el-button>
+                                    </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuItem
@@ -101,29 +105,27 @@
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
-                        <el-input
+                        <InputGroupField
                             v-model="memberSearch"
                             :disabled="!hasGroupPermission(groupMemberModeration.groupRef, 'group-bans-manage')"
                             clearable
-                            size="small"
+                            size="sm"
                             :placeholder="t('dialog.group.members.search')"
                             style="margin-top: 10px; margin-bottom: 10px"
-                            @input="groupMembersSearch"></el-input>
+                            @input="groupMembersSearch" />
                         <br />
-                        <el-button size="small" @click="selectAllGroupMembers">{{
+                        <Button size="sm" variant="outline" @click="selectAllGroupMembers">{{
                             t('dialog.group_member_moderation.select_all')
-                        }}</el-button>
+                        }}</Button>
                         <DataTable
                             v-if="groupMemberModerationTable.data.length"
                             v-bind="groupMemberModerationTable"
                             style="margin-top: 10px">
                             <el-table-column width="55" prop="$selected">
                                 <template #default="scope">
-                                    <el-button text size="small" @click.stop>
-                                        <Checkbox
-                                            v-model="scope.row.$selected"
-                                            @update:modelValue="groupMemberModerationTableSelectionChange(scope.row)" />
-                                    </el-button>
+                                    <Checkbox
+                                        v-model="scope.row.$selected"
+                                        @update:modelValue="groupMemberModerationTableSelectionChange(scope.row)" />
                                 </template>
                             </el-table-column>
                             <el-table-column
@@ -210,35 +212,35 @@
                     :label="t('dialog.group_member_moderation.bans')"
                     :disabled="!hasGroupPermission(groupMemberModeration.groupRef, 'group-bans-manage')">
                     <div style="margin-top: 10px">
-                        <el-button
-                            type="default"
-                            size="small"
-                            :icon="Refresh"
-                            :loading="isGroupMembersLoading"
-                            circle
-                            @click="getAllGroupBans(groupMemberModeration.id)"></el-button>
+                        <Button
+                            class="rounded-full"
+                            variant="outline"
+                            size="icon-sm"
+                            :disabled="isGroupMembersLoading"
+                            @click="getAllGroupBans(groupMemberModeration.id)">
+                            <Spinner v-if="isGroupMembersLoading" />
+                            <Refresh v-else />
+                        </Button>
                         <span style="font-size: 14px; margin-left: 5px; margin-right: 5px">{{
                             groupBansModerationTable.data.length
                         }}</span>
                         <br />
-                        <el-input
+                        <InputGroupField
                             v-model="groupBansModerationTable.filters[0].value"
                             clearable
-                            size="small"
+                            size="sm"
                             :placeholder="t('dialog.group.members.search')"
-                            style="margin-top: 10px; margin-bottom: 10px"></el-input>
+                            style="margin-top: 10px; margin-bottom: 10px" />
                         <br />
-                        <el-button size="small" @click="selectAllGroupBans">{{
+                        <Button size="sm" variant="outline" @click="selectAllGroupBans">{{
                             t('dialog.group_member_moderation.select_all')
-                        }}</el-button>
+                        }}</Button>
                         <DataTable v-bind="groupBansModerationTable" style="margin-top: 10px">
                             <el-table-column width="55" prop="$selected">
                                 <template #default="scope">
-                                    <el-button text size="small" @click.stop>
-                                        <Checkbox
-                                            v-model="scope.row.$selected"
-                                            @update:modelValue="groupMemberModerationTableSelectionChange(scope.row)" />
-                                    </el-button>
+                                    <Checkbox
+                                        v-model="scope.row.$selected"
+                                        @update:modelValue="groupMemberModerationTableSelectionChange(scope.row)" />
                                 </template>
                             </el-table-column>
                             <el-table-column
@@ -324,13 +326,15 @@
                     :label="t('dialog.group_member_moderation.invites')"
                     :disabled="!hasGroupPermission(groupMemberModeration.groupRef, 'group-invites-manage')">
                     <div style="margin-top: 10px">
-                        <el-button
-                            type="default"
-                            size="small"
-                            :icon="Refresh"
-                            :loading="isGroupMembersLoading"
-                            circle
-                            @click="getAllGroupInvitesAndJoinRequests(groupMemberModeration.id)"></el-button>
+                        <Button
+                            class="rounded-full"
+                            variant="outline"
+                            size="icon-sm"
+                            :disabled="isGroupMembersLoading"
+                            @click="getAllGroupInvitesAndJoinRequests(groupMemberModeration.id)">
+                            <Spinner v-if="isGroupMembersLoading" />
+                            <Refresh v-else />
+                        </Button>
                         <br />
                         <el-tabs>
                             <el-tab-pane>
@@ -342,19 +346,17 @@
                                         groupInvitesModerationTable.data.length
                                     }}</span>
                                 </template>
-                                <el-button size="small" @click="selectAllGroupInvites">{{
+                                <Button size="sm" variant="outline" @click="selectAllGroupInvites">{{
                                     t('dialog.group_member_moderation.select_all')
-                                }}</el-button>
+                                }}</Button>
                                 <DataTable v-bind="groupInvitesModerationTable" style="margin-top: 10px">
                                     <el-table-column width="55" prop="$selected">
                                         <template #default="scope">
-                                            <el-button text size="small" @click.stop>
-                                                <Checkbox
-                                                    v-model="scope.row.$selected"
-                                                    @update:modelValue="
-                                                        groupMemberModerationTableSelectionChange(scope.row)
-                                                    " />
-                                            </el-button>
+                                            <Checkbox
+                                                v-model="scope.row.$selected"
+                                                @update:modelValue="
+                                                    groupMemberModerationTableSelectionChange(scope.row)
+                                                " />
                                         </template>
                                     </el-table-column>
                                     <el-table-column
@@ -403,7 +405,8 @@
                                     </el-table-column>
                                 </DataTable>
                                 <br />
-                                <el-button
+                                <Button
+                                    variant="outline"
                                     :disabled="
                                         Boolean(
                                             progressCurrent ||
@@ -411,7 +414,7 @@
                                         )
                                     "
                                     @click="groupMembersDeleteSentInvite"
-                                    >{{ t('dialog.group_member_moderation.delete_sent_invite') }}</el-button
+                                    >{{ t('dialog.group_member_moderation.delete_sent_invite') }}</Button
                                 >
                             </el-tab-pane>
 
@@ -424,19 +427,17 @@
                                         groupJoinRequestsModerationTable.data.length
                                     }}</span>
                                 </template>
-                                <el-button size="small" @click="selectAllGroupJoinRequests">{{
+                                <Button size="sm" variant="outline" @click="selectAllGroupJoinRequests">{{
                                     t('dialog.group_member_moderation.select_all')
-                                }}</el-button>
+                                }}</Button>
                                 <DataTable v-bind="groupJoinRequestsModerationTable" style="margin-top: 10px">
                                     <el-table-column width="55" prop="$selected">
                                         <template #default="scope">
-                                            <el-button text size="small" @click.stop>
-                                                <Checkbox
-                                                    v-model="scope.row.$selected"
-                                                    @update:modelValue="
-                                                        groupMemberModerationTableSelectionChange(scope.row)
-                                                    " />
-                                            </el-button>
+                                            <Checkbox
+                                                v-model="scope.row.$selected"
+                                                @update:modelValue="
+                                                    groupMemberModerationTableSelectionChange(scope.row)
+                                                " />
                                         </template>
                                     </el-table-column>
                                     <el-table-column
@@ -485,7 +486,8 @@
                                     </el-table-column>
                                 </DataTable>
                                 <br />
-                                <el-button
+                                <Button
+                                    variant="outline"
                                     :disabled="
                                         Boolean(
                                             progressCurrent ||
@@ -493,9 +495,10 @@
                                         )
                                     "
                                     @click="groupMembersAcceptInviteRequest"
-                                    >{{ t('dialog.group_member_moderation.accept_join_requests') }}</el-button
+                                    >{{ t('dialog.group_member_moderation.accept_join_requests') }}</Button
                                 >
-                                <el-button
+                                <Button
+                                    variant="outline"
                                     :disabled="
                                         Boolean(
                                             progressCurrent ||
@@ -503,9 +506,10 @@
                                         )
                                     "
                                     @click="groupMembersRejectInviteRequest"
-                                    >{{ t('dialog.group_member_moderation.reject_join_requests') }}</el-button
+                                    >{{ t('dialog.group_member_moderation.reject_join_requests') }}</Button
                                 >
-                                <el-button
+                                <Button
+                                    variant="outline"
                                     :disabled="
                                         Boolean(
                                             progressCurrent ||
@@ -513,7 +517,7 @@
                                         )
                                     "
                                     @click="groupMembersBlockJoinRequest"
-                                    >{{ t('dialog.group_member_moderation.block_join_requests') }}</el-button
+                                    >{{ t('dialog.group_member_moderation.block_join_requests') }}</Button
                                 >
                             </el-tab-pane>
 
@@ -526,19 +530,17 @@
                                         groupBlockedModerationTable.data.length
                                     }}</span>
                                 </template>
-                                <el-button size="small" @click="selectAllGroupBlocked">{{
+                                <Button size="sm" variant="outline" @click="selectAllGroupBlocked">{{
                                     t('dialog.group_member_moderation.select_all')
-                                }}</el-button>
+                                }}</Button>
                                 <DataTable v-bind="groupBlockedModerationTable" style="margin-top: 10px">
                                     <el-table-column width="55" prop="$selected">
                                         <template #default="scope">
-                                            <el-button text size="small" @click.stop>
-                                                <Checkbox
-                                                    v-model="scope.row.$selected"
-                                                    @update:modelValue="
-                                                        groupMemberModerationTableSelectionChange(scope.row)
-                                                    " />
-                                            </el-button>
+                                            <Checkbox
+                                                v-model="scope.row.$selected"
+                                                @update:modelValue="
+                                                    groupMemberModerationTableSelectionChange(scope.row)
+                                                " />
                                         </template>
                                     </el-table-column>
                                     <el-table-column
@@ -587,7 +589,8 @@
                                     </el-table-column>
                                 </DataTable>
                                 <br />
-                                <el-button
+                                <Button
+                                    variant="secondary"
                                     :disabled="
                                         Boolean(
                                             progressCurrent ||
@@ -595,7 +598,7 @@
                                         )
                                     "
                                     @click="groupMembersDeleteBlockedRequest"
-                                    >{{ t('dialog.group_member_moderation.delete_blocked_requests') }}</el-button
+                                    >{{ t('dialog.group_member_moderation.delete_blocked_requests') }}</Button
                                 >
                             </el-tab-pane>
                         </el-tabs>
@@ -606,13 +609,15 @@
                     :label="t('dialog.group_member_moderation.logs')"
                     :disabled="!hasGroupPermission(groupMemberModeration.groupRef, 'group-audit-view')">
                     <div style="margin-top: 10px">
-                        <el-button
-                            type="default"
-                            size="small"
-                            :icon="Refresh"
-                            :loading="isGroupMembersLoading"
-                            circle
-                            @click="getAllGroupLogs(groupMemberModeration.id)"></el-button>
+                        <Button
+                            class="rounded-full"
+                            variant="outline"
+                            size="icon-sm"
+                            :disabled="isGroupMembersLoading"
+                            @click="getAllGroupLogs(groupMemberModeration.id)">
+                            <Spinner v-if="isGroupMembersLoading" />
+                            <Refresh v-else />
+                        </Button>
                         <span style="font-size: 14px; margin-left: 5px; margin-right: 5px">{{
                             groupLogsModerationTable.data.length
                         }}</span>
@@ -634,17 +639,17 @@
                                 </Select>
                             </div>
                             <div>
-                                <el-button @click="showGroupLogsExportDialog">{{
+                                <Button variant="outline" @click="showGroupLogsExportDialog">{{
                                     t('dialog.group_member_moderation.export_logs')
-                                }}</el-button>
+                                }}</Button>
                             </div>
                         </div>
-                        <el-input
+                        <InputGroupField
                             v-model="groupLogsModerationTable.filters[0].value"
                             clearable
-                            size="small"
+                            size="sm"
                             :placeholder="t('dialog.group.members.search')"
-                            style="margin-top: 10px; margin-bottom: 10px"></el-input>
+                            style="margin-top: 10px; margin-bottom: 10px" />
                         <br />
                         <DataTable v-bind="groupLogsModerationTable" style="margin-top: 10px">
                             <el-table-column
@@ -703,29 +708,31 @@
             <br />
             <span class="name">{{ t('dialog.group_member_moderation.user_id') }}</span>
             <br />
-            <el-input
+            <InputGroupField
                 v-model="selectUserId"
-                size="small"
+                size="sm"
                 style="margin-top: 5px; width: 340px"
                 :placeholder="t('dialog.group_member_moderation.user_id_placeholder')"
-                clearable></el-input>
-            <el-button
-                size="small"
+                clearable />
+            <Button
+                size="sm"
+                variant="outline"
                 style="margin-top: 5px; margin-left: 5px"
                 :disabled="!selectUserId"
                 @click="selectGroupMemberUserId"
-                >{{ t('dialog.group_member_moderation.select_user') }}</el-button
+                >{{ t('dialog.group_member_moderation.select_user') }}</Button
             >
             <br />
             <br />
             <span class="name">{{ t('dialog.group_member_moderation.selected_users') }}</span>
-            <el-button
-                type="default"
-                size="small"
-                :icon="Delete"
-                circle
+            <Button
+                class="rounded-full"
+                size="icon-sm"
+                variant="outline"
                 style="margin-left: 5px"
-                @click="clearSelectedGroupMembers"></el-button>
+                @click="clearSelectedGroupMembers">
+                <Trash2
+            /></Button>
             <br />
             <Badge
                 v-for="user in selectedUsersArray"
@@ -758,16 +765,13 @@
             <br />
             <br />
             <span class="name">{{ t('dialog.group_member_moderation.notes') }}</span>
-            <el-input
+            <InputGroupTextareaField
                 v-model="note"
                 class="extra"
-                type="textarea"
                 :rows="2"
-                :autosize="{ minRows: 1, maxRows: 20 }"
                 :placeholder="t('dialog.group_member_moderation.note_placeholder')"
-                size="small"
-                resize="none"
-                style="margin-top: 5px"></el-input>
+                style="margin-top: 5px"
+                input-class="resize-none min-h-0" />
             <br />
             <br />
             <span class="name">{{ t('dialog.group_member_moderation.selected_roles') }}</span>
@@ -786,67 +790,85 @@
             <br />
             <span class="name">{{ t('dialog.group_member_moderation.actions') }}</span>
             <br />
-            <el-button
-                :disabled="
-                    Boolean(
-                        !selectedRoles.length ||
-                        progressCurrent ||
-                        !hasGroupPermission(groupMemberModeration.groupRef, 'group-roles-assign')
-                    )
-                "
-                @click="groupMembersAddRoles"
-                >{{ t('dialog.group_member_moderation.add_roles') }}</el-button
-            >
-            <el-button
-                :disabled="
-                    Boolean(
-                        !selectedRoles.length ||
-                        progressCurrent ||
-                        !hasGroupPermission(groupMemberModeration.groupRef, 'group-roles-assign')
-                    )
-                "
-                @click="groupMembersRemoveRoles"
-                >{{ t('dialog.group_member_moderation.remove_roles') }}</el-button
-            >
-            <el-button
-                :disabled="
-                    Boolean(
-                        progressCurrent || !hasGroupPermission(groupMemberModeration.groupRef, 'group-members-manage')
-                    )
-                "
-                @click="groupMembersSaveNote"
-                >{{ t('dialog.group_member_moderation.save_note') }}</el-button
-            >
-            <el-button
-                :disabled="
-                    Boolean(
-                        progressCurrent || !hasGroupPermission(groupMemberModeration.groupRef, 'group-members-remove')
-                    )
-                "
-                @click="groupMembersKick"
-                >{{ t('dialog.group_member_moderation.kick') }}</el-button
-            >
-            <el-button
-                :disabled="
-                    Boolean(progressCurrent || !hasGroupPermission(groupMemberModeration.groupRef, 'group-bans-manage'))
-                "
-                @click="groupMembersBan"
-                >{{ t('dialog.group_member_moderation.ban') }}</el-button
-            >
-            <el-button
-                :disabled="
-                    Boolean(progressCurrent || !hasGroupPermission(groupMemberModeration.groupRef, 'group-bans-manage'))
-                "
-                @click="groupMembersUnban"
-                >{{ t('dialog.group_member_moderation.unban') }}</el-button
-            >
-            <span v-if="progressCurrent" style="margin-top: 10px">
-                <el-icon class="is-loading" style="margin-left: 5px; margin-right: 5px"><Loading /></el-icon>
-                {{ t('dialog.group_member_moderation.progress') }} {{ progressCurrent }}/{{ progressTotal }}
-            </span>
-            <el-button v-if="progressCurrent" style="margin-left: 5px" @click="progressTotal = 0">{{
-                t('dialog.group_member_moderation.cancel')
-            }}</el-button>
+            <div class="flex gap-2">
+                <Button
+                    variant="outline"
+                    :disabled="
+                        Boolean(
+                            !selectedRoles.length ||
+                            progressCurrent ||
+                            !hasGroupPermission(groupMemberModeration.groupRef, 'group-roles-assign')
+                        )
+                    "
+                    @click="groupMembersAddRoles"
+                    >{{ t('dialog.group_member_moderation.add_roles') }}</Button
+                >
+                <Button
+                    variant="secondary"
+                    :disabled="
+                        Boolean(
+                            !selectedRoles.length ||
+                            progressCurrent ||
+                            !hasGroupPermission(groupMemberModeration.groupRef, 'group-roles-assign')
+                        )
+                    "
+                    @click="groupMembersRemoveRoles"
+                    >{{ t('dialog.group_member_moderation.remove_roles') }}</Button
+                >
+                <Button
+                    variant="outline"
+                    :disabled="
+                        Boolean(
+                            progressCurrent ||
+                            !hasGroupPermission(groupMemberModeration.groupRef, 'group-members-manage')
+                        )
+                    "
+                    @click="groupMembersSaveNote"
+                    >{{ t('dialog.group_member_moderation.save_note') }}</Button
+                >
+                <Button
+                    variant="outline"
+                    :disabled="
+                        Boolean(
+                            progressCurrent ||
+                            !hasGroupPermission(groupMemberModeration.groupRef, 'group-members-remove')
+                        )
+                    "
+                    @click="groupMembersKick"
+                    >{{ t('dialog.group_member_moderation.kick') }}</Button
+                >
+                <Button
+                    variant="outline"
+                    :disabled="
+                        Boolean(
+                            progressCurrent || !hasGroupPermission(groupMemberModeration.groupRef, 'group-bans-manage')
+                        )
+                    "
+                    @click="groupMembersBan"
+                    >{{ t('dialog.group_member_moderation.ban') }}</Button
+                >
+                <Button
+                    variant="outline"
+                    :disabled="
+                        Boolean(
+                            progressCurrent || !hasGroupPermission(groupMemberModeration.groupRef, 'group-bans-manage')
+                        )
+                    "
+                    @click="groupMembersUnban"
+                    >{{ t('dialog.group_member_moderation.unban') }}</Button
+                >
+                <span v-if="progressCurrent" style="margin-top: 10px">
+                    <el-icon class="is-loading" style="margin-left: 5px; margin-right: 5px"><Loading /></el-icon>
+                    {{ t('dialog.group_member_moderation.progress') }} {{ progressCurrent }}/{{ progressTotal }}
+                </span>
+                <Button
+                    variant="secondary"
+                    v-if="progressCurrent"
+                    style="margin-left: 5px"
+                    @click="progressTotal = 0"
+                    >{{ t('dialog.group_member_moderation.cancel') }}</Button
+                >
+            </div>
         </div>
         <group-member-moderation-export-dialog
             v-model:isGroupLogsExportDialogVisible="isGroupLogsExportDialogVisible"
@@ -855,8 +877,12 @@
 </template>
 
 <script setup>
-    import { ArrowDown, Delete, Loading, Refresh, Warning } from '@element-plus/icons-vue';
+    import { ArrowDown, Loading, Refresh, Warning } from '@element-plus/icons-vue';
     import { reactive, ref, watch } from 'vue';
+    import { InputGroupField, InputGroupTextareaField } from '@/components/ui/input-group';
+    import { Button } from '@/components/ui/button';
+    import { Spinner } from '@/components/ui/spinner';
+    import { Trash2 } from 'lucide-vue-next';
     import { storeToRefs } from 'pinia';
     import { toast } from 'vue-sonner';
     import { useI18n } from 'vue-i18n';

@@ -17,14 +17,16 @@
             <span v-text="totalCacheSize"></span>
             <span>GB</span>
             <TooltipWrapper side="top" :content="t('dialog.config_json.refresh')">
-                <el-button
-                    type="default"
-                    :loading="VRChatCacheSizeLoading"
-                    size="small"
-                    :icon="Refresh"
-                    circle
+                <Button
+                    class="rounded-full"
+                    variant="outline"
+                    size="icon-sm"
+                    :disabled="VRChatCacheSizeLoading"
                     style="margin-left: 5px"
-                    @click="getVRChatCacheSize"></el-button>
+                    @click="getVRChatCacheSize">
+                    <Spinner v-if="VRChatCacheSizeLoading" />
+                    <Refresh v-else />
+                </Button>
             </TooltipWrapper>
 
             <div style="margin-top: 10px">
@@ -44,23 +46,24 @@
             <div v-for="(item, value) in VRChatConfigList" :key="value" style="display: block; margin-top: 10px">
                 <span style="word-break: keep-all">{{ item.name }}:</span>
                 <div style="display: flex">
-                    <el-input
+                    <InputGroupAction
                         v-model="VRChatConfigFile[value]"
                         :placeholder="item.default"
-                        size="small"
+                        size="sm"
                         :type="item.type ? item.type : 'text'"
                         :min="item.min"
                         :max="item.max"
                         @input="refreshDialogValues"
                         style="flex: 1; margin-top: 5px">
-                        <template #append>
+                        <template #actions>
                             <Button
                                 size="sm"
                                 variant="outline"
                                 v-if="item.folderBrowser"
-                                @click="openConfigFolderBrowser(value)"></Button>
+                                @click="openConfigFolderBrowser(value)">
+                            </Button>
                         </template>
-                    </el-input>
+                    </InputGroupAction>
                 </div>
             </div>
 
@@ -170,9 +173,11 @@
     import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
     import { computed, ref, watch } from 'vue';
     import { Button } from '@/components/ui/button';
+    import { InputGroupAction } from '@/components/ui/input-group';
     import { Checkbox } from '@/components/ui/checkbox';
     import { ElMessageBox } from 'element-plus';
     import { Refresh } from '@element-plus/icons-vue';
+    import { Spinner } from '@/components/ui/spinner';
     import { storeToRefs } from 'pinia';
     import { toast } from 'vue-sonner';
     import { useI18n } from 'vue-i18n';

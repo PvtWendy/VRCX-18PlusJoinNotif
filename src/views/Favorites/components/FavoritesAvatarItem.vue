@@ -52,14 +52,13 @@
                                         ? t('view.favorite.delete_tooltip')
                                         : t('view.favorite.unfavorite_tooltip')
                                 ">
-                                <el-button
-                                    size="small"
-                                    circle
-                                    class="favorites-search-card__action-btn"
-                                    :type="isLocalFavorite ? 'default' : 'default'"
+                                <Button
+                                    size="icon-sm"
+                                    variant="outline"
+                                    class="favorites-search-card__action-btn rounded-full text-xs h-6 w-6"
                                     @click.stop="handlePrimaryDeleteAction">
                                     <i class="ri-delete-bin-line"></i>
-                                </el-button>
+                                </Button>
                             </TooltipWrapper>
                         </div>
                     </div>
@@ -68,13 +67,14 @@
                     <div class="favorites-search-card__action-group">
                         <div class="favorites-search-card__action" v-if="canSelectAvatar">
                             <TooltipWrapper side="top" :content="t('view.favorite.select_avatar_tooltip')">
-                                <el-button
+                                <Button
+                                    size="icon-sm"
+                                    variant="outline"
                                     :disabled="currentUser.currentAvatar === favorite.id"
-                                    size="small"
-                                    :icon="Check"
-                                    circle
-                                    class="favorites-search-card__action-btn"
-                                    @click.stop="selectAvatarWithConfirmation(favorite.id)" />
+                                    class="favorites-search-card__action-btn rounded-full text-xs h-6 w-6"
+                                    @click.stop="selectAvatarWithConfirmation(favorite.id)"
+                                    ><i class="ri-check-line"></i
+                                ></Button>
                             </TooltipWrapper>
                         </div>
                         <div class="favorites-search-card__action">
@@ -82,22 +82,22 @@
                                 v-if="showDangerUnfavorite"
                                 side="bottom"
                                 :content="t('view.favorite.unfavorite_tooltip')">
-                                <el-button
-                                    size="small"
-                                    :icon="Close"
-                                    circle
-                                    class="favorites-search-card__action-btn"
-                                    type="danger"
-                                    @click.stop="handlePrimaryDeleteAction" />
+                                <Button
+                                    size="icon-sm"
+                                    variant="destructive"
+                                    class="favorites-search-card__action-btn rounded-full text-xs h-6 w-6"
+                                    @click.stop="handlePrimaryDeleteAction"
+                                    ><i class="ri-delete-bin-line"></i
+                                ></Button>
                             </TooltipWrapper>
                             <TooltipWrapper v-else side="bottom" :content="t('view.favorite.edit_favorite_tooltip')">
-                                <el-button
-                                    type="default"
-                                    :icon="Star"
-                                    size="small"
-                                    circle
-                                    class="favorites-search-card__action-btn"
-                                    @click.stop="showFavoriteDialog('avatar', favorite.id)" />
+                                <Button
+                                    size="icon-sm"
+                                    variant="outline"
+                                    class="favorites-search-card__action-btn rounded-full text-xs h-6 w-6"
+                                    @click.stop="showFavoriteDialog('avatar', favorite.id)"
+                                    ><i class="ri-star-line"></i
+                                ></Button>
                             </TooltipWrapper>
                         </div>
                     </div>
@@ -113,9 +113,13 @@
             </div>
             <div class="favorites-search-card__actions">
                 <div class="favorites-search-card__action">
-                    <el-button circle type="default" size="small" @click.stop="handlePrimaryDeleteAction">
+                    <Button
+                        class="rounded-full text-xs h-6 w-6"
+                        size="icon-sm"
+                        variant="outline"
+                        @click.stop="handlePrimaryDeleteAction">
                         <i class="ri-delete-bin-line"></i>
-                    </el-button>
+                    </Button>
                 </div>
             </div>
         </template>
@@ -123,7 +127,7 @@
 </template>
 
 <script setup>
-    import { Check, Close, Star } from '@element-plus/icons-vue';
+    import { Button } from '@/components/ui/button';
     import { Checkbox } from '@/components/ui/checkbox';
     import { computed } from 'vue';
     import { storeToRefs } from 'pinia';

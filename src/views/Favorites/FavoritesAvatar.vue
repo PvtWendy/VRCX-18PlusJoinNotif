@@ -27,15 +27,14 @@
                 </Select>
             </div>
             <div class="favorites-toolbar__right">
-                <el-input
+                <InputGroupSearch
                     v-model="avatarFavoriteSearch"
-                    clearable
                     class="favorites-toolbar__search"
                     :placeholder="t('view.favorite.avatars.search')"
                     @input="searchAvatarFavorites" />
                 <DropdownMenu v-model:open="avatarToolbarMenuOpen">
                     <DropdownMenuTrigger as-child>
-                        <el-button :icon="MoreFilled" size="small" circle />
+                        <Button class="rounded-full" size="icon-sm" variant="ghost"> <Ellipsis /> </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent class="favorites-dropdown">
                         <li class="favorites-dropdown__control" @click.stop>
@@ -80,12 +79,15 @@
                         <div class="group-section__header">
                             <span>{{ t('view.favorite.avatars.vrchat_favorites') }}</span>
                             <TooltipWrapper side="bottom" :content="t('view.favorite.refresh_favorites_tooltip')">
-                                <el-button
-                                    :loading="isFavoriteLoading"
-                                    size="small"
-                                    :icon="Refresh"
-                                    circle
-                                    @click.stop="handleRefreshFavorites" />
+                                <Button
+                                    class="rounded-full"
+                                    variant="outline"
+                                    size="icon-sm"
+                                    :disabled="isFavoriteLoading"
+                                    @click.stop="handleRefreshFavorites">
+                                    <Spinner v-if="isFavoriteLoading" />
+                                    <Refresh v-else />
+                                </Button>
                             </TooltipWrapper>
                         </div>
                         <div class="group-section__list">
@@ -112,12 +114,9 @@
                                                 handleGroupMenuVisible(remoteGroupMenuKey(group.key), $event)
                                             ">
                                             <PopoverTrigger asChild>
-                                                <el-button
-                                                    text
-                                                    size="small"
-                                                    :icon="MoreFilled"
-                                                    circle
-                                                    @click.stop></el-button>
+                                                <Button class="rounded-full" variant="ghost" size="icon-sm" @click.stop>
+                                                    <MoreFilled />
+                                                </Button>
                                             </PopoverTrigger>
                                             <PopoverContent side="right" class="w-55 p-1 rounded-lg">
                                                 <div class="favorites-group-menu">
@@ -195,16 +194,19 @@
                         <div class="group-section__header">
                             <span>{{ t('view.favorite.avatars.local_favorites') }}</span>
                             <template v-if="!refreshingLocalFavorites">
-                                <el-button
-                                    size="small"
-                                    :icon="Refresh"
-                                    circle
-                                    @click.stop="refreshLocalAvatarFavorites" />
+                                <Button
+                                    class="rounded-full"
+                                    size="icon"
+                                    variant="outline"
+                                    @click.stop="refreshLocalAvatarFavorites"
+                                    ><RefreshCcw
+                                /></Button>
                             </template>
-                            <el-button v-else size="small" text @click.stop="cancelLocalAvatarRefresh">
-                                <el-icon class="is-loading"><Loading /></el-icon>
+                            <Button size="sm" variant="ghost" v-else @click.stop="cancelLocalAvatarRefresh">
+                                <Loader />
+
                                 {{ t('view.favorite.avatars.cancel_refresh') }}
-                            </el-button>
+                            </Button>
                         </div>
                         <div class="group-section__list">
                             <template v-if="localAvatarFavoriteGroups.length">
@@ -226,12 +228,13 @@
                                                 :open="activeGroupMenu === localGroupMenuKey(group)"
                                                 @update:open="handleGroupMenuVisible(localGroupMenuKey(group), $event)">
                                                 <PopoverTrigger asChild>
-                                                    <el-button
-                                                        text
-                                                        size="small"
-                                                        :icon="MoreFilled"
-                                                        circle
-                                                        @click.stop></el-button>
+                                                    <Button
+                                                        class="rounded-full"
+                                                        size="icon-sm"
+                                                        variant="ghost"
+                                                        @click.stop
+                                                        ><Ellipsis
+                                                    /></Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent side="right" class="w-50 p-1 rounded-lg">
                                                     <div class="favorites-group-menu">
@@ -276,11 +279,11 @@
                                     <span>{{ t('view.favorite.avatars.new_group') }}</span>
                                 </div>
                             </TooltipWrapper>
-                            <el-input
+                            <InputGroupField
                                 v-else
                                 ref="newLocalGroupInput"
                                 v-model="newLocalGroupName"
-                                size="small"
+                                size="sm"
                                 class="group-item__input"
                                 :placeholder="t('view.favorite.avatars.new_group')"
                                 @keyup.enter="handleLocalGroupCreationConfirm"
@@ -295,7 +298,9 @@
                                 :open="activeGroupMenu === historyGroupMenuKey"
                                 @update:open="handleGroupMenuVisible(historyGroupMenuKey, $event)">
                                 <PopoverTrigger asChild>
-                                    <el-button text size="small" :icon="MoreFilled" circle @click.stop></el-button>
+                                    <Button class="rounded-full" size="icon-sm" variant="ghost" @click.stop
+                                        ><Ellipsis
+                                    /></Button>
                                 </PopoverTrigger>
                                 <PopoverContent side="right" class="w-45 p-1 rounded-lg">
                                     <div class="favorites-group-menu">
@@ -359,25 +364,34 @@
                         <div
                             v-if="avatarEditMode && !isSearchActive && activeRemoteGroup"
                             class="favorites-content__actions">
-                            <el-button size="small" @click="toggleSelectAllAvatars">
+                            <Button size="sm" variant="outline" @click="toggleSelectAllAvatars">
                                 {{
                                     isAllAvatarsSelected
                                         ? t('view.favorite.deselect_all')
                                         : t('view.favorite.select_all')
                                 }}
-                            </el-button>
-                            <el-button size="small" :disabled="!hasAvatarSelection" @click="clearSelectedAvatars">
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="secondary"
+                                :disabled="!hasAvatarSelection"
+                                @click="clearSelectedAvatars">
                                 {{ t('view.favorite.clear') }}
-                            </el-button>
-                            <el-button size="small" :disabled="!hasAvatarSelection" @click="copySelectedAvatars">
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                :disabled="!hasAvatarSelection"
+                                @click="copySelectedAvatars">
                                 {{ t('view.favorite.copy') }}
-                            </el-button>
-                            <el-button
-                                size="small"
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="outline"
                                 :disabled="!hasAvatarSelection"
                                 @click="showAvatarBulkUnfavoriteSelectionConfirm">
                                 {{ t('view.favorite.bulk_unfavorite') }}
-                            </el-button>
+                            </Button>
                         </div>
                     </div>
                     <div ref="avatarFavoritesContainerRef" class="favorites-content__list">
@@ -496,8 +510,13 @@
 
 <script setup>
     import { computed, h, nextTick, onBeforeMount, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
-    import { Loading, MoreFilled, Plus, Refresh } from '@element-plus/icons-vue';
     import { ElMessageBox, ElNotification, ElProgress } from 'element-plus';
+    import { MoreFilled, Plus, Refresh } from '@element-plus/icons-vue';
+    import { Ellipsis, RefreshCcw } from 'lucide-vue-next';
+    import { Button } from '@/components/ui/button';
+    import { InputGroupField, InputGroupSearch } from '@/components/ui/input-group';
+    import { Loader } from 'lucide-vue-next';
+    import { Spinner } from '@/components/ui/spinner';
     import { storeToRefs } from 'pinia';
     import { toast } from 'vue-sonner';
     import { useI18n } from 'vue-i18n';
