@@ -5,16 +5,16 @@ import dayjs from 'dayjs';
 import * as utils from '../shared/utils';
 
 const AppDebug = reactive({
-    debug: false,
-    debugWebSocket: false,
-    debugUserDiff: false,
-    debugPhotonLogging: false,
-    debugGameLog: false,
+    debug: true,
+    debugWebSocket: true,
+    debugUserDiff: true,
+    debugPhotonLogging: true,
+    debugGameLog: true,
     debugWebRequests: false,
     debugFriendState: false,
     debugIPC: false,
     debugVrcPlus: false,
-    errorNoty: null,
+    errorNoty: false,
     dontLogMeOut: false,
     endpointDomain: 'https://api.vrchat.cloud/api/1',
     endpointDomainVrchat: 'https://api.vrchat.cloud/api/1',

@@ -712,23 +712,23 @@ export const useNotificationStore = defineStore('Notification', () => {
                     }
                 });
             } else {
-                if (playXSNotification) {
-                    displayXSNotification(noty, message, '');
-                }
-                if (playOvrtHudNotifications || playOvrtWristNotifications) {
-                    displayOvrtNotification(
-                        playOvrtHudNotifications,
-                        playOvrtWristNotifications,
-                        noty,
-                        message,
-                        ''
-                    );
-                }
-                if (playDesktopToast) {
-                    displayDesktopToast(noty, message, '');
-                }
-                if (playOverlayNotification) {
-                    displayOverlayNotification(noty, message, '');
+                        if (playXSNotification) {
+                            displayXSNotification(noty, message, '');
+                        }
+                        if (playOvrtHudNotifications || playOvrtWristNotifications) {
+                            displayOvrtNotification(
+                                playOvrtHudNotifications,
+                                playOvrtWristNotifications,
+                                noty,
+                                message,
+                                ''
+                            );
+                        }
+                        if (playDesktopToast) {
+                            displayDesktopToast(noty, message, '');
+                        }
+                        if (playOverlayNotification) {
+                            displayOverlayNotification(noty, message, '');
                 }
             }
         }
@@ -1225,7 +1225,7 @@ export const useNotificationStore = defineStore('Notification', () => {
         if (imageFile) {
             image = `file:///${imageFile}`;
         }
-        noty.ageVerified = userStore.getUserAgeVerificationStatus(noty.userId);
+        //noty.ageVerified = userStore.getUserAgeVerificationStatus(noty.userId);
 
         console.log('displayOverlayNotification', noty, message, image);
 

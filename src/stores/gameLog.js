@@ -645,6 +645,7 @@ export const useGameLogStore = defineStore('GameLog', () => {
                     created_at: gameLog.dt,
                     type: 'OnPlayerJoined',
                     displayName: gameLog.displayName,
+                    AgeVerificationStatus: userStore.getUserAgeVerificationStatus(userId),
                     location,
                     userId,
                     time: 0
